@@ -27,6 +27,10 @@ export default ({ mode }) => {
         '/api': {
           target: 'http://47.102.42.66',
           changeOrigin: true
+        },
+        '/geoserver': {
+          target: 'http://47.102.42.66:8080',
+          changeOrigin: true
         }
       }
     },
