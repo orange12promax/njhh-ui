@@ -7,11 +7,17 @@ import { onMounted, ref } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.chinatmsproviders'
-import './components/better.js'
 import { getWmsLayerParam } from './components/geoserver.api'
 
 const mapElement = ref()
 
+interface Props {
+  origin: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  origin: ''
+})
 const emits = defineEmits(['featureClick'])
 
 onMounted(() => {
@@ -38,13 +44,13 @@ onMounted(() => {
 
   const workspace = 'tongshan'
   const layers = ['guandao', 'bengzhan']
-  const url = `/geoserver/${workspace}/wms`
+  const url = `${props.origin}/geoserver/${workspace}/wms`
 
   const layerTransparent = true
   const layerFormat = 'image/png'
 
   let wmsLayers: L.TileLayer.WMS[] = []
-  getWmsLayerParam(workspace, layers).then((params) => {
+  getWmsLayerParam(workspace, layers, props.origin).then((params) => {
     wmsLayers = params.map((param) =>
       L.tileLayer
         .wms(url, {
